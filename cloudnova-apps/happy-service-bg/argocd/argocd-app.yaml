@@ -4,9 +4,9 @@ metadata:
   name: happy-service-blue-green
   namespace: argocd
 spec:
-  project: applications
+  project: default
   source:
-    repoURL: https://https://github.com/sysadmin-exe/cloudnova
+    repoURL: https://github.com/sysadmin-exe/cloudnova
     path: cloudnova-apps/happy-service-bg/manifests
     targetRevision: HEAD
   destination:
