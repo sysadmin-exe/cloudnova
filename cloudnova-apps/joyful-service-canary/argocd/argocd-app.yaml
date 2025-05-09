@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: joyfyul-service-canary
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sysadmin-exe/cloudnova
+    path: cloudnova-apps/joyful-service-canary/manifests
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: joyful-service
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
