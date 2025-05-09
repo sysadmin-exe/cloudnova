@@ -20,7 +20,7 @@ spec:
             - name: VERSION
               value: "v2"
           ports:
-            - containerPort: 5000
+            - containerPort: 8080
   strategy:
     blueGreen:
       activeService: happy-blue-green-active
