@@ -7,7 +7,7 @@ spec:
   project: applications
   source:
     repoURL: https://https://github.com/sysadmin-exe/cloudnova
-    path: app/happy-service-bg/manifests
+    path: cloudnova-apps/happy-service-bg/manifests
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
