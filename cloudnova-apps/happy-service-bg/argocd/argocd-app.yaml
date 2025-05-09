@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: happy-service-blue-green
+  namespace: argocd
+spec:
+  project: applications
+  source:
+    repoURL: https://https://github.com/sysadmin-exe/cloudnova
+    path: app/happy-service-bg/manifests
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: happy-service
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: happy-blue-green-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: happy-blue-green-deployment
+  template:
+    metadata:
+      labels:
+        app: happy-blue-green-deployment
+    spec:
+      containers:
+        - name: blue-green
+          image: sysadminexe/happy-blue-green:v1
+          imagePullPolicy: Always
+          env:
+            - name: VERSION
+              value: "v1"
+          ports:
+            - containerPort: 5000
+  strategy:
+    blueGreen:
+      activeService: happy-blue-green-active
+      previewService: happy-blue-green-preview
+      autoPromotionEnabled: false
+      # abortScaleDownDelaySeconds: 10
+      # autoPromotionEnabled: false
+      # scaleDownDelaySeconds: 60
+      # previewReplicaCount: 2
+      # autoPromotionSeconds: 20
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: happy-blue-green-active
+spec:
+  selector:
+    app: happy-blue-green-deployment
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 8080
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: happy-blue-green-preview
+spec:
+  selector:
+    app: happy-blue-green-deployment
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 8080
