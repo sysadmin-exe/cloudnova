@@ -33,7 +33,7 @@ runs:
     - name: Update file
       shell: bash
       run: |
-        yq e '.spec.template.spec.containers[0].image = "${{ inputs.docker_repo_tag }}"' -i ${{ inputs.manifest_path }}
+        yq 'select(.kind == "Rollout") | .spec.template.spec.containers[0].image = "${{ inputs.docker_repo_tag }}"' -i ${{ inputs.manifest_path }}
 
     - name: Commit and push changes
       shell: bash
