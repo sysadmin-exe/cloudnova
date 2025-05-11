@@ -38,6 +38,7 @@ runs:
     - name: Commit and push changes
       shell: bash
       run: |
+        git pull origin main
         git add ${{ inputs.manifest_path }}
         git commit -m "${{ inputs.commit_message }}"
         git push --set-upstream origin main
