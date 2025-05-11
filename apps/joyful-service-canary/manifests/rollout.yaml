@@ -28,8 +28,8 @@ spec:
           image: sysadminexe/joyful-service:900ec1
           imagePullPolicy: Always
           env:
-            - name: VERSION
-              value: "v2"
+            - name: foo
+              value: bar
           ports:
             - containerPort: 8080
 ---
