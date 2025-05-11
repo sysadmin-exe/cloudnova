@@ -1,104 +1,102 @@
 name: Update File and Auto-Merge PR
+description: 'This workflow updates a file in the repository and creates a pull request. It also enables auto-merge for the PR if possible.'
+inputs:
+  file_path:
+    description: 'Path to the file to update'
+    required: true
+  app_name:
+    description: 'Name of the application'
+    required: true
+  docker_repo_tag:
+    description: 'Docker repository and tag'
+    required: true
+  manifest_path:
+    description: 'Path to the manifest file'
+    required: true
+  branch_name:
+    description: 'Name of the new branch'
+    required: true
+    default: 'automated-update'
+  commit_message:
+    description: 'Commit message'
+    required: true
+    default: 'Automated update of configuration file'
+  pr_title:
+    description: 'PR title'
+    required: true
+    default: 'Automated Update - Configuration File'
+  gh_token:
+    description: 'GitHub token for authentication'
+    required: true
+    default: ${{ secrets.GITHUB_TOKEN }}
+  pr_body:
+    description: 'PR description'
+    required: true
+    default: 'This PR was automatically created to update the configuration file.'
 
-on:
-  # You can trigger this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      file_path:
-        description: 'Path to the file to update'
-        required: true
-      app_name:
-        description: 'Name of the application'
-        required: true
-      docker_repo_tag:
-        description: 'Docker repository and tag'
-        required: true
-      manifest_path:
-        description: 'Path to the manifest file'
-        required: true
-      branch_name:
-        description: 'Name of the new branch'
-        required: true
-        default: 'automated-update'
-      commit_message:
-        description: 'Commit message'
-        required: true
-        default: 'Automated update of configuration file'
-      pr_title:
-        description: 'PR title'
-        required: true
-        default: 'Automated Update - Configuration File'
-      pr_body:
-        description: 'PR description'
-        required: true
-        default: 'This PR was automatically created to update the configuration file.'
 
-
-jobs:
-  update-file-create-pr:
-    env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Git Identity
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
         
-      - name: Setup Git Identity
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
-          
-      - name: Create branch
-        run: |
-          git checkout -b ${{ github.event.inputs.branch_name || 'automated-update' }}
+    - name: Create branch
+      run: |
+        git checkout -b ${{ inputs.branch_name || 'automated-update' }}
 
-      - name: Install yq
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y yq
+    - name: Install yq
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y yq
 
-      - name: Update file
-        run: |
-          yq --arg IMAGE "${{ github.event.input.docker_repo_tag }}" '.spec.template.spec.containers[0].image = $IMAGE' ${{ github.event.inputs.manifest_path }}
+    - name: Update file
+      run: |
+        yq --arg IMAGE "${{ input.docker_repo_tag }}" '.spec.template.spec.containers[0].image = $IMAGE' ${{ inputs.manifest_path }}
 
-      - name: Commit changes
-        run: |
-          git add ${{ github.event.inputs.file_path || 'data/config.json' }}
-          git commit -m "${{ github.event.inputs.commit_message || 'Automated update of configuration file' }}"
-          
-      - name: Push changes
-        run: |
-          git push --set-upstream origin ${{ github.event.inputs.branch_name || 'automated-update' }}
-          
-      - name: Create Pull Request
-        id: create_pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ env.GITHUB_TOKEN }}
-          commit-message: ${{ github.event.inputs.commit_message || 'Automated update of configuration file' }}
-          branch: ${{ github.event.inputs.branch_name || 'automated-update' }}
-          delete-branch: true
-          title: ${{ github.event.inputs.pr_title || 'Automated Update - Configuration File' }}
-          body: ${{ github.event.inputs.pr_body || 'This PR was automatically created to update the configuration file.' }}
-          
-      - name: Enable Auto-Merge
-        if: steps.create_pr.outputs.pull-request-number
-        uses: peter-evans/enable-pull-request-automerge@v3
-        with:
-          token: ${{ env.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
-          merge-method: squash
-
-      # Wait a bit before checking PR status
-      - name: Wait for PR checks
-        run: sleep 30
+    - name: Commit changes
+      run: |
+        git add ${{ inputs.file_path || 'data/config.json' }}
+        git commit -m "${{ inputs.commit_message || 'Automated update of configuration file' }}"
         
-      # Check status and merge if possible
-      - name: Merge PR
-        if: steps.create_pr.outputs.pull-request-number
-        run: |
-          pr_number=${{ steps.create_pr.outputs.pull-request-number }}
-          echo "Attempting to merge PR #$pr_number"
-          gh pr merge $pr_number --merge --delete-branch
-        env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+    - name: Push changes
+      run: |
+        git push --set-upstream origin ${{ inputs.branch_name || 'automated-update' }}
+        
+    - name: Create Pull Request
+      id: create_pr
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ env.GITHUB_TOKEN }}
+        commit-message: ${{ inputs.commit_message || 'Automated update of configuration file' }}
+        branch: ${{ inputs.branch_name || 'automated-update' }}
+        delete-branch: true
+        title: ${{ inputs.pr_title || 'Automated Update - Configuration File' }}
+        body: ${{ inputs.pr_body || 'This PR was automatically created to update the configuration file.' }}
+        
+    - name: Enable Auto-Merge
+      if: steps.create_pr.outputs.pull-request-number
+      uses: peter-evans/enable-pull-request-automerge@v3
+      with:
+        token: ${{ env.GITHUB_TOKEN }}
+        pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
+        merge-method: squash
+
+    # Wait a bit before checking PR status
+    - name: Wait for PR checks
+      run: sleep 30
+      
+    # Check status and merge if possible
+    - name: Merge PR
+      if: steps.create_pr.outputs.pull-request-number
+      run: |
+        pr_number=${{ steps.create_pr.outputs.pull-request-number }}
+        echo "Attempting to merge PR #$pr_number"
+        gh pr merge $pr_number --merge --delete-branch
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh_token }}
