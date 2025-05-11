@@ -60,7 +60,7 @@ jobs:
         with:
           file_path: apps/happy-service-bg/manifests/rollout.yaml
           app_name: happy-service-bg
-          docker_repo_tag: ${{ secrets.DOCKER_USERNAME }}/joyful-service:${{ github.sha }}
+          docker_repo_tag: sysadminexe/joyful-service:${{ github.sha }}
           manifest_path: apps/happy-service-bg/manifests/rollout.yaml
           branch_name: automated-update-joyful-service
           commit_message: Automated update of manifest file

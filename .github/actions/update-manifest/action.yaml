@@ -60,7 +60,7 @@ runs:
     - name: Update file
       shell: bash
       run: |
-        yq --arg IMAGE "${{ input.docker_repo_tag }}" '.spec.template.spec.containers[0].image = $IMAGE' ${{ inputs.manifest_path }}
+        yq --arg IMAGE "${{ inputs.docker_repo_tag }}" '.spec.template.spec.containers[0].image = $IMAGE' ${{ inputs.manifest_path }}
 
     - name: Commit changes
       shell: bash
