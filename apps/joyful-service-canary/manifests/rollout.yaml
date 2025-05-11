@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: joyful-service-canary
-        image: sysadminexe/joyful-canary:v1
+        image: sysadminexe/joyful-service:v1
         imagePullPolicy: Always
         env:
         - name: VERSION

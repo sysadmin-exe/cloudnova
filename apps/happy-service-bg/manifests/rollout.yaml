@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: blue-green
-          image: sysadminexe/happy-blue-green:v1
+          image: sysadminexe/happy-service:v1
           imagePullPolicy: Always
           env:
             - name: foo
