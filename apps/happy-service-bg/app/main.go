@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -23,11 +22,7 @@ func main() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	version := os.Getenv("VERSION")
-	if version == "" {
-		version = "v1"
-	}
-	file := fmt.Sprintf("static/index_%s.html", version)
+	file := "static/index_v1.html"
 
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		http.Error(w, "404 - Page Not Found", http.StatusNotFound)

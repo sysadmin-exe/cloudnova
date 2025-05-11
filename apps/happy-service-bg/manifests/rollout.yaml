@@ -17,8 +17,8 @@ spec:
           image: sysadminexe/happy-blue-green:v1
           imagePullPolicy: Always
           env:
-            - name: VERSION
-              value: "v2"
+            - name: foo
+              value: bar
           ports:
             - containerPort: 8080
   strategy:
