@@ -43,7 +43,3 @@ spec:
       targetPort: 8080
   selector:
     app: joyful-service-canary
-  template:
-    spec:
-      containers:
-        - image: sysadminexe/joyful-service:900ec1
