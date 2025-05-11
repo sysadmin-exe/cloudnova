@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: joyful-service-canary
+  name: joyful-canary
 spec:
   replicas: 5
   strategy:
@@ -17,14 +17,14 @@ spec:
         - pause: {duration: 5m}
   selector:
     matchLabels:
-      app: joyful-service-canary
+      app: joyful-canary
   template:
     metadata:
       labels:
-        app: joyful-service-canary
+        app: joyful-canary
     spec:
       containers:
-        - name: joyful-service-canary
+        - name: joyful-canary
           image: sysadminexe/joyful-service:900ec1
           imagePullPolicy: Always
           env:
@@ -36,10 +36,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: joyful-service-canary
+  name: joyful-canary
 spec:
   ports:
     - port: 5000
       targetPort: 8080
   selector:
-    app: joyful-service-canary
+    app: joyful-canary
