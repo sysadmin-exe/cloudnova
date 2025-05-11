@@ -28,7 +28,6 @@ inputs:
   gh_token:
     description: 'GitHub token for authentication'
     required: true
-    default: ${{ secrets.GITHUB_TOKEN }}
   pr_body:
     description: 'PR description'
     required: true
@@ -42,29 +41,35 @@ runs:
       uses: actions/checkout@v4
       
     - name: Setup Git Identity
+      shell: bash
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
         
     - name: Create branch
+      shell: bash
       run: |
         git checkout -b ${{ inputs.branch_name || 'automated-update' }}
 
     - name: Install yq
+      shell: bash
       run: |
         sudo apt-get update
         sudo apt-get install -y yq
 
     - name: Update file
+      shell: bash
       run: |
         yq --arg IMAGE "${{ input.docker_repo_tag }}" '.spec.template.spec.containers[0].image = $IMAGE' ${{ inputs.manifest_path }}
 
     - name: Commit changes
+      shell: bash
       run: |
         git add ${{ inputs.file_path || 'data/config.json' }}
         git commit -m "${{ inputs.commit_message || 'Automated update of configuration file' }}"
         
     - name: Push changes
+      shell: bash
       run: |
         git push --set-upstream origin ${{ inputs.branch_name || 'automated-update' }}
         
@@ -72,7 +77,7 @@ runs:
       id: create_pr
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ env.GITHUB_TOKEN }}
+        token: ${{ inputs.gh_token }}
         commit-message: ${{ inputs.commit_message || 'Automated update of configuration file' }}
         branch: ${{ inputs.branch_name || 'automated-update' }}
         delete-branch: true
@@ -83,16 +88,18 @@ runs:
       if: steps.create_pr.outputs.pull-request-number
       uses: peter-evans/enable-pull-request-automerge@v3
       with:
-        token: ${{ env.GITHUB_TOKEN }}
+        token: ${{ inputs.gh_token }}
         pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
         merge-method: squash
 
     # Wait a bit before checking PR status
     - name: Wait for PR checks
+      shell: bash
       run: sleep 30
       
     # Check status and merge if possible
     - name: Merge PR
+      shell: bash
       if: steps.create_pr.outputs.pull-request-number
       run: |
         pr_number=${{ steps.create_pr.outputs.pull-request-number }}
