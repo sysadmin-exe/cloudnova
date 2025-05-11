@@ -35,7 +35,7 @@ jobs:
         with:
           context: apps/happy-service-bg/app/
           push: true
-          tags: sysadminexe/happy-service:latest,sysadminexe/happy-service:${{ steps.short-sha.outputs.sha }}
+          tags: sysadminexe/happy-service:latest,sysadminexe/happy-service:${{ steps.short-sha.outputs.sha }} 
 
   test:
     runs-on: ubuntu-latest
@@ -68,12 +68,6 @@ jobs:
       - name: Deploy to Kubernetes
         uses: ./.github/actions/update-manifest
         with:
-          file_path: apps/happy-service-bg/manifests/rollout.yaml
-          app_name: happy-service-bg
           docker_repo_tag: sysadminexe/joyful-service:${{ steps.short-sha.outputs.sha }}
           manifest_path: apps/happy-service-bg/manifests/rollout.yaml
-          branch_name: automated-update-joyful-service-${{ steps.short-sha.outputs.sha }}
           commit_message: Automated update of manifest file
-          pr_title: Automated Update - Joyful Service
-          pr_body: This PR was automatically created to update the configuration file.
-          gh_token: ${{ secrets.GH_TOKEN }}
