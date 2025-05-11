@@ -7,7 +7,7 @@ on:
     paths:
       - 'apps/joyful-service-canary/app/**'
       - '.github/workflows/deploy-joyful-service.yaml'
-
+  
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -25,12 +25,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+        with:
+          length: 6
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: apps/joyful-service-canary/app/
           push: true
-          tags: sysadminexe/joyful-service:latest,sysadminexe/joyful-service:${{ github.sha }}
+          tags: sysadminexe/joyful-service:latest,sysadminexe/joyful-service:$${{ steps.short-sha.outputs.sha }}
 
   test:
     runs-on: ubuntu-latest
@@ -55,14 +60,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+        with:
+          length: 6
+
       - name: Deploy to Kubernetes
         uses: ./.github/actions/update-manifest
         with:
           file_path: apps/joyful-service-canary/manifests/rollout.yaml
           app_name: joyful-service-canary
-          docker_repo_tag: sysadminexe/joyful-service:${{ github.sha }}
+          docker_repo_tag: sysadminexe/joyful-service:${{ steps.short-sha.outputs.sha }}
           manifest_path: apps/joyful-service-canary/manifests/rollout.yaml
-          branch_name: automated-update-joyful-service
+          branch_name: automated-update-joyful-service-${{ steps.short-sha.outputs.sha }}
           commit_message: Automated update of manifest file
           pr_title: Automated Update - Joyful Service
           pr_body: This PR was automatically created to update the configuration file.
