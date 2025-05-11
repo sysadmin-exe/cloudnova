@@ -28,7 +28,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: apps/joyful-service-canary/app/
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/joyful-service:latest,${{ secrets.DOCKER_USERNAME }}/joyful-service:${{ github.sha }}
 
