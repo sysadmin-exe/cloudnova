@@ -25,22 +25,10 @@ spec:
     spec:
       containers:
         - name: joyful-canary
-          image: sysadminexe/joyful-service:5f11c7
+          image: sysadminexe/joyful-service:9b5659
           imagePullPolicy: Always
           env:
             - name: foo
               value: bar
           ports:
             - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: joyful-canary
-spec:
-  ports:
-    - port: 5000
-      targetPort: 8080
-  selector:
-    app: joyful-canary
-
