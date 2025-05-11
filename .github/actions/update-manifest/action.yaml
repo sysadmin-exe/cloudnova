@@ -62,15 +62,11 @@ runs:
       run: |
         yq e '.spec.template.spec.containers[0].image = "${{ inputs.docker_repo_tag }}"' -i ${{ inputs.manifest_path }}
 
-    - name: Commit changes
+    - name: Commit and push changes
       shell: bash
       run: |
         git add ${{ inputs.file_path }}
         git commit -m "${{ inputs.commit_message }}"
-        
-    - name: Push changes
-      shell: bash
-      run: |
         git push --set-upstream origin ${{ inputs.branch_name }}
         
     - name: Create Pull Request
@@ -79,6 +75,7 @@ runs:
       with:
         token: ${{ inputs.gh_token }}
         commit-message: ${{ inputs.commit_message }}
+        base: main
         branch: ${{ inputs.branch_name }}
         delete-branch: true
         title: ${{ inputs.pr_title }}
