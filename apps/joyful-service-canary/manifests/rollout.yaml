@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: joyful-canary
-          image: sysadminexe/joyful-service:900ec1
+          image: sysadminexe/joyful-service:5f11c7
           imagePullPolicy: Always
           env:
             - name: foo
@@ -43,3 +43,7 @@ spec:
       targetPort: 8080
   selector:
     app: joyful-canary
+  template:
+    spec:
+      containers:
+        - image: sysadminexe/joyful-service:5f11c7
