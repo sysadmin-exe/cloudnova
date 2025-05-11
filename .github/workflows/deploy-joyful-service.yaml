@@ -52,6 +52,9 @@ jobs:
     if: success()
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Deploy to Kubernetes
         uses: ./.github/actions/update-manifest
         with:
