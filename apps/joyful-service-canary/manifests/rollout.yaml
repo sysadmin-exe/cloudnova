@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: joyful-service-canary
-          image: sysadminexe/joyful-service:cb9546
+          image: sysadminexe/joyful-service:900ec1
           imagePullPolicy: Always
           env:
             - name: VERSION
@@ -46,4 +46,4 @@ spec:
   template:
     spec:
       containers:
-        - image: sysadminexe/joyful-service:cb9546
+        - image: sysadminexe/joyful-service:900ec1
