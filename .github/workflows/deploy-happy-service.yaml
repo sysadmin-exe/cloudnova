@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'apps/happy-service-bg/app/**'
-      - '.github/workflows/deploy-happy-service.yaml'
 
 jobs:
   build-and-push:

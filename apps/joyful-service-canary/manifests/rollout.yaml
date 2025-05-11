@@ -10,11 +10,11 @@ spec:
         - setWeight: 20
         - pause: {}
         - setWeight: 40
-        - pause: {duration: 10s}
+        - pause: {}
         - setWeight: 60
-        - pause: {duration: 20s}
-        - setWeight: 80
         - pause: {duration: 1m}
+        - setWeight: 80
+        - pause: {duration: 5m}
   selector:
     matchLabels:
       app: joyful-service-canary

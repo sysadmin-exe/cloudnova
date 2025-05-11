@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'apps/joyful-service-canary/app/**'
-      - '.github/workflows/deploy-joyful-service.yaml'
   
 jobs:
   build-and-push:
