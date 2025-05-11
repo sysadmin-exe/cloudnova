@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: blue-green
-          image: sysadminexe/happy-service:v1
+          image: sysadminexe/joyful-service:cb9546
           imagePullPolicy: Always
           env:
             - name: foo
@@ -43,7 +43,10 @@ spec:
     - protocol: TCP
       port: 5000
       targetPort: 8080
-
+  template:
+    spec:
+      containers:
+        - image: sysadminexe/joyful-service:cb9546
 ---
 kind: Service
 apiVersion: v1
@@ -56,3 +59,7 @@ spec:
     - protocol: TCP
       port: 5000
       targetPort: 8080
+  template:
+    spec:
+      containers:
+        - image: sysadminexe/joyful-service:cb9546
