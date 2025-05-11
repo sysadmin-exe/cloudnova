@@ -49,7 +49,7 @@ runs:
     - name: Create branch
       shell: bash
       run: |
-        git checkout -b ${{ inputs.branch_name || 'automated-update' }}
+        git checkout -b ${{ inputs.branch_name }}
 
     - name: Install yq
       shell: bash
@@ -65,24 +65,24 @@ runs:
     - name: Commit changes
       shell: bash
       run: |
-        git add ${{ inputs.file_path || 'data/config.json' }}
-        git commit -m "${{ inputs.commit_message || 'Automated update of configuration file' }}"
+        git add ${{ inputs.file_path }}
+        git commit -m "${{ inputs.commit_message }}"
         
     - name: Push changes
       shell: bash
       run: |
-        git push --set-upstream origin ${{ inputs.branch_name || 'automated-update' }}
+        git push --set-upstream origin ${{ inputs.branch_name }}
         
     - name: Create Pull Request
       id: create_pr
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ inputs.gh_token }}
-        commit-message: ${{ inputs.commit_message || 'Automated update of configuration file' }}
-        branch: ${{ inputs.branch_name || 'automated-update' }}
+        commit-message: ${{ inputs.commit_message }}
+        branch: ${{ inputs.branch_name }}
         delete-branch: true
-        title: ${{ inputs.pr_title || 'Automated Update - Configuration File' }}
-        body: ${{ inputs.pr_body || 'This PR was automatically created to update the configuration file.' }}
+        title: ${{ inputs.pr_title }}
+        body: ${{ inputs.pr_body }}
         
     - name: Enable Auto-Merge
       if: steps.create_pr.outputs.pull-request-number
