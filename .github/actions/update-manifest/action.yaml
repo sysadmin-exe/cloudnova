@@ -54,8 +54,8 @@ runs:
     - name: Install yq
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get install -y yq
+        wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+        chmod +x /usr/local/bin/yq
 
     - name: Update file
       shell: bash
