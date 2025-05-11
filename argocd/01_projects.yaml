@@ -4,6 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: default
+  namespace: argocd
 spec:
   sourceRepos: []
   sourceNamespaces: []
@@ -28,9 +29,9 @@ spec:
       kind: '*'
   description: Cloudnova Applications project
   destinations:
-    - namespace: 'happy-service'
+    - namespace: 'happy-service-bg'
       server: https://kubernetes.default.svc
-    - namespace: 'joyful-service'
+    - namespace: 'joyful-service-canary'
       server: https://kubernetes.default.svc
     - namespace: 'argocd'
       server: https://kubernetes.default.svc

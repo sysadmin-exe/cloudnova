@@ -17,7 +17,7 @@ spec:
           - git:
               repoURL: https://github.com/sysadmin-exe/cloudnova
               revision: HEAD
-              files:
+              directories:
                 - path: 'apps/*'
 
   template:

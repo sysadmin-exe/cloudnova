@@ -33,6 +33,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
+          platforms: linux/amd64,linux/arm64
           context: apps/happy-service-bg/app/
           push: true
           tags: sysadminexe/happy-service:latest,sysadminexe/happy-service:${{ steps.short-sha.outputs.sha }} 

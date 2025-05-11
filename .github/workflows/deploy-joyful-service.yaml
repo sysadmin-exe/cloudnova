@@ -33,6 +33,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
+          platforms: linux/amd64,linux/arm64
           context: apps/joyful-service-canary/app/
           push: true
           tags: sysadminexe/joyful-service:latest,sysadminexe/joyful-service:${{ steps.short-sha.outputs.sha }}
