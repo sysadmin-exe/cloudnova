@@ -26,10 +26,9 @@ spec:
       activeService: happy-blue-green-active
       previewService: happy-blue-green-preview
       autoPromotionEnabled: false
+      previewReplicaCount: 2
       # abortScaleDownDelaySeconds: 10
-      # autoPromotionEnabled: false
       # scaleDownDelaySeconds: 60
-      # previewReplicaCount: 2
       # autoPromotionSeconds: 20
 ---
 kind: Service
