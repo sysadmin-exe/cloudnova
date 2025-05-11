@@ -29,11 +29,7 @@ spec:
       kind: '*'
   description: Cloudnova Applications project
   destinations:
-    - namespace: 'happy-service-bg'
-      server: https://kubernetes.default.svc
-    - namespace: 'joyful-service-canary'
-      server: https://kubernetes.default.svc
-    - namespace: 'argocd'
+    - namespace: '*'
       server: https://kubernetes.default.svc
   namespaceResourceWhitelist:
     - group: '*'
