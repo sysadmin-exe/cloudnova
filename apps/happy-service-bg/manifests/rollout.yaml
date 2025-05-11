@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: happy-blue-green
-          image: sysadminexe/happy-service:b01d07
+          image: sysadminexe/joyful-service:9b5659
           imagePullPolicy: Always
           env:
             - name: foo
@@ -30,29 +30,3 @@ spec:
       # abortScaleDownDelaySeconds: 10
       # scaleDownDelaySeconds: 60
       # autoPromotionSeconds: 20
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: happy-blue-green-active
-spec:
-  selector:
-    app: happy-blue-green
-  ports:
-    - protocol: TCP
-      port: 5000
-      targetPort: 8080
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: happy-blue-green-preview
-spec:
-  selector:
-    app: happy-blue-green
-  ports:
-    - protocol: TCP
-      port: 5000
-      targetPort: 8080
-
