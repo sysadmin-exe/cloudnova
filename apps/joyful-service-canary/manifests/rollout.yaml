@@ -14,7 +14,7 @@ spec:
         - pause: {duration: 5m}
         - analysis:
             templates:
-              - templateName: success-rate
+              - templateName: status-check
                 clusterScope: true
             args:
               - name: service-name
