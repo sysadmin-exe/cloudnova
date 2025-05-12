@@ -40,6 +40,12 @@ spec:
       previewService: happy-blue-green-preview
       autoPromotionEnabled: false
       previewReplicaCount: 2
-      # abortScaleDownDelaySeconds: 10
-      # scaleDownDelaySeconds: 60
-      # autoPromotionSeconds: 20
+      autoPromotionSeconds: 300
+      prePromotionAnalysis:
+        templates:
+          - templateName: status-check
+            clusterScope: true
+        args:
+          - name: service-name
+            value: happy-blue-green-preview.happy-service-bg.svc.cluster.local
+        failureMode: Abort

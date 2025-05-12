@@ -23,6 +23,7 @@ When a feature PR is created, the following processes take place:
 - When the PR checks passes, the PR can be merged to the main branch 
 - The commit to the main branch triggers the `deploy-<service>.yaml` workflow which builds the image and tags it with the short sha and pushes to docker hub
 - The workflow also updates the argocd rollout manifest which then causes argocd to sync the application and deploy the new version
+- Argocd automatically runs a test to the newly deployed service
 - If there are no issues with the new version, it is promoted to the main active running version and the old version is phased out
 - If there are issues with the new version, the application can be rolled back via argocd and the issue is fixed, tested and redeployed
 
@@ -39,13 +40,21 @@ Canary config below states that on the first deployment of the new version, only
     canary:
       steps:
         - setWeight: 20
-        - pause: {}
-        - setWeight: 40
-        - pause: {}
-        - setWeight: 60
         - pause: {duration: 1m}
-        - setWeight: 80
+        - setWeight: 40
         - pause: {duration: 5m}
+        - analysis:
+            templates:
+              - templateName: status-check
+                clusterScope: true
+            args:
+              - name: service-name
+                value: joyful-canary.joyful-service-canary.svc.cluster.local
+            failureMode: Abort
+        - setWeight: 60
+        - pause: {duration: 10m}
+        - setWeight: 80
+        - pause: {duration: 20m}
 ```
 
 ![alt text](docs/joyful-canary-application.png "joyful-canary-application")
@@ -64,9 +73,15 @@ Blue-Green strategy config below sets the K8S services to be used for the blue a
       previewService: happy-blue-green-preview
       autoPromotionEnabled: false
       previewReplicaCount: 2
-      # abortScaleDownDelaySeconds: 10
-      # scaleDownDelaySeconds: 60
-      # autoPromotionSeconds: 20
+      autoPromotionSeconds: 300
+      prePromotionAnalysis:
+        templates:
+          - templateName: status-check
+            clusterScope: true
+        args:
+          - name: service-name
+            value: happy-blue-green-preview.happy-service-bg.svc.cluster.local
+        failureMode: Abort
 ```
 
 ![alt text](docs/happy-blue-green-application.png "happy-blue-green-application")
