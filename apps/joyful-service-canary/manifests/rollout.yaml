@@ -4,6 +4,7 @@ metadata:
   name: joyful-canary
 spec:
   replicas: 5
+  revisionHistoryLimit: 2
   strategy:
     canary:
       steps:
