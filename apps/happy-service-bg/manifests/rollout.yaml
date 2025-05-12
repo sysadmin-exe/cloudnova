@@ -21,6 +21,18 @@ spec:
               value: bar
           ports:
             - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
   strategy:
     blueGreen:
       activeService: happy-blue-green-active

@@ -14,6 +14,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", home)
+	http.HandleFunc("/ping", pingHandler) // Add the ping handler
 
 	log.Printf("Starting server on %s...\n", port)
 	if err := http.ListenAndServe(port, nil); err != nil {
@@ -30,4 +31,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.ServeFile(w, r, file)
+}
+
+func pingHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("pong"))
 }
