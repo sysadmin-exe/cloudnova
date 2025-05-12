@@ -13,10 +13,10 @@ spec:
         - pause: {}
         - analysis:
             templates:
-            - templateName: success-rate
+              - templateName: success-rate
             args:
-            - name: service-name
-              value: joyful-canary
+              - name: service-name
+                value: joyful-canary
             # Set this to true for automatic rollbacks
             failureMode: Abort
         - setWeight: 60
@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: joyful-canary
-          image: sysadminexe/joyful-service:9b5659
+          image: sysadminexe/joyful-service:15bc25
           imagePullPolicy: Always
           env:
             - name: foo
@@ -52,15 +52,3 @@ spec:
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 5
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: joyful-canary
-spec:
-  ports:
-    - port: 5000
-      targetPort: 8080
-  selector:
-    app: joyful-canary
-
