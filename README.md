@@ -8,12 +8,19 @@ This consists of Argocd configurations for the Cloudnova applications. Here we c
   - restrict where apps may be deployed to (destination clusters and namespaces)
   - restrict what kinds of objects may or may not be deployed (e.g. RBAC, CRDs, DaemonSets, NetworkPolicy etc...)
   - defining project roles to provide application RBAC (bound to OIDC groups and/or JWT tokens)
-- Appset for automatically creating argocd applications based on application directories 
+- Appset for automatically creating argocd applications based on application directories
+- Analysis template to be used in the rollout strategy 
 
 ## Applications
 Argocd rollout is used to deploy the changes to Kubernetes clusters. The manifests can be found in the `apps` folder in `rollout.yaml`. 
 
 2 applications - happy-service and joyful-service both have their source code in this repo in the `apps` directory. 
+
+## CICD Setup
+After the EKS cluster has been created:
+- Connect to the cluster
+- Run `kubectl apply -f argocd/` to install the argocd resources that will manage the applications
+- Port-forward the `argocd-server` service and check the status of the application status and sync if needed
 
 ## Application deployment process
 The approach is to Argocd rollouts where the main branch is the source of truth and as the start of deployment process. Changes made to the application is first tested in PRs before merged to the main branch where a docker image with commit sha as the tag is created and deployed into the environment. 
