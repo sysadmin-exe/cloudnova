@@ -14,10 +14,10 @@ spec:
         - analysis:
             templates:
               - templateName: success-rate
+                clusterScope: true
             args:
               - name: service-name
                 value: joyful-canary
-            # Set this to true for automatic rollbacks
             failureMode: Abort
         - setWeight: 60
         - pause: {duration: 1m}
