@@ -3,6 +3,8 @@ kind: ClusterAnalysisTemplate
 metadata:
   name: success-rate
 spec:
+  args:
+    - name: service-name
   metrics:
   - name: success-rate
     interval: 5s
