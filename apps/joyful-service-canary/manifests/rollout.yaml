@@ -8,21 +8,21 @@ spec:
     canary:
       steps:
         - setWeight: 20
-        - pause: {}
+        - pause: {duration: 1m}
         - setWeight: 40
-        - pause: {}
+        - pause: {duration: 5m}
         - analysis:
             templates:
               - templateName: success-rate
                 clusterScope: true
             args:
               - name: service-name
-                value: joyful-canary
+                value: joyful-canary.joyful-service-canary.svc.cluster.local
             failureMode: Abort
         - setWeight: 60
-        - pause: {duration: 1m}
+        - pause: {duration: 10m}
         - setWeight: 80
-        - pause: {duration: 5m}
+        - pause: {duration: 20m}
   selector:
     matchLabels:
       app: joyful-canary

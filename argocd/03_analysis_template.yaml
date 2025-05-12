@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: ClusterAnalysisTemplate
 metadata:
   name: success-rate
-  namespace: argocd
 spec:
   metrics:
   - name: success-rate
