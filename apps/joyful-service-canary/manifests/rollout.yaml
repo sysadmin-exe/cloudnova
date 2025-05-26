@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: joyful-canary
-          image: sysadminexe/joyful-service:36b6ac
+          image: sysadminexe/joyful-service:8b5b0c
           imagePullPolicy: Always
           env:
             - name: foo
