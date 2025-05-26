@@ -48,4 +48,3 @@ spec:
         args:
           - name: service-name
             value: happy-blue-green-preview.happy-service-bg.svc.cluster.local
-        failureMode: Abort
