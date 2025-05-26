@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+const version = "v1"
+
 func main() {
 	port := ":8080"
 
@@ -23,7 +25,7 @@ func main() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	file := "static/index_v1.html"
+	file := "static/index_" + version + ".html"
 
 	if _, err := os.Stat(file); os.IsNotExist(err) {
 		http.Error(w, "404 - Page Not Found", http.StatusNotFound)
