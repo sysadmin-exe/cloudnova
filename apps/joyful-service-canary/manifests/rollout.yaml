@@ -19,7 +19,6 @@ spec:
             args:
               - name: service-name
                 value: joyful-canary.joyful-service-canary.svc.cluster.local
-            failureMode: Abort
         - setWeight: 60
         - pause: {duration: 10m}
         - setWeight: 80
